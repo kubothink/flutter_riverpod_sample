@@ -1,47 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_sample/main.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ReadPage extends StatelessWidget {
+class ReadPage extends HookConsumerWidget {
   const ReadPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // Use Consumer Widget as cover for state cahnge widget scope.
-    return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final helloWorld = ref.read(helloWorldProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyleHL6 = Theme.of(context).textTheme.headline6;
+    String _hwText = 'NULL';
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Read Samples'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            // Rebuild widget by watched value changed.
+            Consumer(
+              builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                final helloWorld = ref.watch(helloWorldProvider);
 
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Read Samples'),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
+                return SizedBox(
                   width: double.infinity,
-                  height: 60.0,
+                  height: 200.0,
                   child: Card(
                     // margin: EdgeInsets.all(4),
                     // color: Colors.grey,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 8.0),
+                    child: Center(
                       child: Text(
                         helloWorld,
-                        style: Theme.of(context).textTheme.headline4,
+                        style: textStyleHL6,
                       ),
                     ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Value read only when pressd.
+          final hw = ref.read(helloWorldProvider);
+          print(hw);
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

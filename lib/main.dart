@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_sample/read_page.dart';
 
 // Can read this value from app global scope.
 final helloWorldProvider = Provider((ref) => 'Hello World');
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Riverpod Sample'),
     );
   }
 }
@@ -30,33 +31,31 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use Consumer Widget as cover for state cahnge widget scope.
-    return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final helloWorld = ref.read(helloWorldProvider);
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  helloWorld,
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Card(
+            child: ListTile(
+              leading: const CircleAvatar(
+                child: Icon(Icons.face),
+              ),
+              title: const Text('Read'),
+              subtitle: const Text('Read provider value'),
+              trailing: const Icon(Icons.keyboard_arrow_right),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return const ReadPage();
+                }));
+              },
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-        );
-      },
+        ],
+      ),
     );
   }
 }
